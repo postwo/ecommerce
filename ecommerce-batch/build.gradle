@@ -1,0 +1,19 @@
+
+bootJar{
+    enabled = false
+}
+
+// 별도의 자르로 실해이되야하기때문에 true
+jar{
+    enabled = true
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+
+    testImplementation 'org.springframework.batch:spring-batch-test'
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -4,28 +4,43 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'com.ecinnerce'
-version = '0.0.1-SNAPSHOT'
-description = 'Demo project for Spring Boot'
+// allprojects = 밑의 하위 모듈들이 메인 gradle을 사용할수 있게 적용
+allprojects {
 
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+	group = 'com.ecommerce'
+	version = '0.0.1-SNAPSHOT'
+
+	// 모든 모듈에서 위 plugin을 적용시킨다는 의미
+	apply plugin: 'java-library'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	java {
+		toolchain {
+			languageVersion = JavaLanguageVersion.of(17)
+		}
 	}
+
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		runtimeOnly 'org.postgresql:postgresql'
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+
+
+		// test 용
+		runtimeOnly 'com.h2database:h2'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+		testImplementation "org.junit.jupiter:junit-jupiter-api"
+		testImplementation "org.junit.jupiter:junit-jupiter-engine"
+	}
+
 }
 
-repositories {
-	mavenCentral()
-}
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'org.postgresql:postgresql'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
 
-tasks.named('test') {
-	useJUnitPlatform()
-}

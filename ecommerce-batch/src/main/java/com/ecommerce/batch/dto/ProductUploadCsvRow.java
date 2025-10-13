@@ -5,7 +5,7 @@ import lombok.*;
 @Data
 @Setter
 @NoArgsConstructor // 접근제한을 안건이유는 dto는 객체를 만들고 외부에서 필드를 넣을 수 있기 떄문에 안건거다
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE) // 정적 메서드만 사용하게 강제 한다
 public class ProductUploadCsvRow {
 
     private Long sellerId;// 판매자 아이디
@@ -20,4 +20,22 @@ public class ProductUploadCsvRow {
 
     private int salesPrice; // 상품의 가격
     private int stockQuantity; // 상품의 수량
+
+    // 정적 생성자 생성
+    public static ProductUploadCsvRow of(Long sellerId, String category, String productName,
+                                         String salesStartDate, String salesEndDate, String productStatus, String brand,
+                                         String manufacturer, int salesPrice, int stockQuantity) {
+        return new ProductUploadCsvRow(
+                sellerId,
+                category,
+                productName,
+                salesStartDate,
+                salesEndDate,
+                productStatus,
+                brand,
+                manufacturer,
+                salesPrice,
+                stockQuantity
+        );
+    }
 }

@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 빈 생성자를 외부에서 편하게 쓰기위해 프로덕트를 상속받은곳에서만 쓸수있게 지정
 @AllArgsConstructor(access = AccessLevel.PRIVATE) // 전체 필드에 대한 생성자도 프라이빗으로 선언해서 샹송자는 정적 생성자만 쓸수 있게 세팅
 public class Product { // 상품
-    private String productId;
+
+    private String productId; //productId는 csv파일에 넣어주는게 아니다
     private Long sellerId;// 판매자 아이디
 
 

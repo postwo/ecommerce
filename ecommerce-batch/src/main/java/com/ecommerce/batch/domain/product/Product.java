@@ -1,7 +1,8 @@
 package com.ecommerce.batch.domain.product;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import com.ecommerce.batch.dto.ProductUploadCsvRow;
+import com.ecommerce.batch.util.DateTimeUtils;
+import com.ecommerce.batch.util.RandomUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,8 +24,7 @@ public class Product { // 상품
     private String productName; //상품명
     private LocalDate salesStartDate; // 판매 시작일
     private LocalDate salesEndDate; // 판매 종료일
-    @Enumerated(EnumType.STRING)
-    private ProductStatus productStatus; // 상품의 상태
+    private String productStatus; // 상품의 상태
     private String brand;
     private String manufacturer; // 제조사
 
@@ -34,4 +34,22 @@ public class Product { // 상품
     private LocalDateTime updatedAt; // 데이터 수정된 시간
 
 
+    public static Product from(ProductUploadCsvRow row) {
+        LocalDateTime now = LocalDateTime.now();
+        return new Product(
+                RandomUtils.generateRandomId(),
+                row.getSellerId(),
+                row.getCategory(),
+                row.getProductName(),
+                DateTimeUtils.toLocalDate(row.getSalesStartDate()),
+                DateTimeUtils.toLocalDate(row.getSalesEndDate()),
+                row.getProductStatus(),
+                row.getBrand(),
+                row.getManufacturer(),
+                row.getSalesPrice(),
+                row.getStockQuantity(),
+                now,
+                now
+        );
+    }
 }

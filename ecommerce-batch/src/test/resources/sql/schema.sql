@@ -21,3 +21,23 @@ CREATE INDEX idx_products_category ON products (category);
 CREATE INDEX idx_products_brand ON products (brand);
 CREATE INDEX idx_products_manufacturer ON products (manufacturer);
 CREATE INDEX idx_products_seller_id ON products (seller_id);
+
+UPDATE batch_job_execution
+SET
+    status = 'FAILED',
+    end_time = NOW(),
+    exit_code = 'FAILED',
+    exit_message = 'Manually marked as FAILED'
+WHERE job_execution_id = 40;
+
+
+select * from batch_job_execution;
+
+
+DELETE FROM batch_step_execution_context;
+DELETE FROM batch_step_execution;
+DELETE FROM batch_job_execution_context;
+DELETE FROM batch_job_execution_params;
+DELETE FROM batch_job_execution;
+DELETE FROM batch_job_instance;
+

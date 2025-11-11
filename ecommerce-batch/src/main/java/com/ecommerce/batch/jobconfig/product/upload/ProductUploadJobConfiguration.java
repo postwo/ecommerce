@@ -67,6 +67,7 @@ public class ProductUploadJobConfiguration {
     @Bean
     @StepScope
     public FlatFileItemReader<ProductUploadCsvRow> productReader(
+            // edit configuration 에서 arg 에 설정 --spirng.boot.job.names=prodcutUploadjob inputFilePath=data/radom_product.csv
             @Value("#{jobParameters['inputFilePath']}") String path
     ){
         return new FlatFileItemReaderBuilder<ProductUploadCsvRow>()

@@ -6,6 +6,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -14,6 +15,8 @@ import javax.sql.DataSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
+@AutoConfigureObservability
 //코드 중복을 제거하고 테스트 코드의 일관성 유지 ,Job 테스트에서 공통으로 사용되는 설정과 유틸리티를 한 곳에 모음
 @Sql("/sql/schema.sql") //schema를 가지고 데이터베이스를 미리 만든 다음에 테스트가 끝나면 없어진다
 @SpringBatchTest

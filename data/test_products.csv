@@ -1,6 +1,0 @@
-sellerId,category,productName,salesStartDate,salesEndDate,productStatus,brand,manufacturer,salesPrice,stockQuantity
-35,음악,축구공,2023-07-15,2025-09-08,OUT_OF_STOCK,LG,LG전자,481897,812
-90,디지털,스킨케어 세트,2023-10-02,2024-06-07,DISCONTINUED,BMW,스타벅스코리아,363052,798
-43,음악,소설,2022-08-17,2026-05-16,DISCONTINUED,BMW,LG전자,12062,703
-63,음악,스마트폰,2023-02-20,2025-08-24,OUT_OF_STOCK,맥도날드,스타벅스코리아,244797,405
-43,서적,레고,2021-06-14,2024-09-24,AVAILABLE,아모레퍼시픽,스타벅스코리아,384823,354

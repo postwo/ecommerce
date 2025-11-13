@@ -56,6 +56,7 @@ class ProductUploadJobConfigurationTest extends BaseBatchIntegrationTest {
                 .addJobParameter("inputFilePath",
                         //input.getFile().getPath()로 절대 경로를 전달
                         new JobParameter<>(input.getFile().getPath(), String.class, false))
+                .addJobParameter("gridSize", new JobParameter<>(3, Integer.class, false))
                 .toJobParameters();
     }
 

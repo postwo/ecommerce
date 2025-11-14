@@ -33,6 +33,19 @@ public class Product { // 상품
     private LocalDateTime createdAt; // 데이터 생성된 시간
     private LocalDateTime updatedAt; // 데이터 수정된 시간
 
+    public static Product of(String productId, Long sellerId, String category, String productName,
+                             LocalDate salesStartDate,
+                             LocalDate salesEndDate, ProductStatus productStatus, String brand,
+                             String manufacturer, int salesPrice,
+                             int stockQuantity,
+                             LocalDateTime createdAt, LocalDateTime updatedAt) {
+        return new Product(productId, sellerId, category, productName, salesStartDate, salesEndDate,
+                productStatus.name(), brand, manufacturer,
+                salesPrice, stockQuantity,
+                createdAt,
+                updatedAt);
+    }
+
 
     public static Product from(ProductUploadCsvRow row) {
         LocalDateTime now = LocalDateTime.now();

@@ -58,10 +58,10 @@ public class ProductUploadJobConfiguration {
     // "productUploadPartitionStep" 이렇게 문자열로 감싸서 넣어줘도 된다
     @Bean
     public Step productUploadPartitionStep(JobRepository jobRepository
-            , Step productUploadPartitionStep, SplitFilePartitioner splitFilePartitioner
+            , Step productUploadStep, SplitFilePartitioner splitFilePartitioner
             , PartitionHandler filePartitionHandler){
         return new StepBuilder("productUploadPartitionStep",jobRepository)
-                .partitioner(productUploadPartitionStep.getName(),splitFilePartitioner)//쪼개져서 실행될 스텝명
+                .partitioner(productUploadStep.getName(),splitFilePartitioner)//쪼개져서 실행될 스텝명
                 .partitionHandler(filePartitionHandler)
                 .allowStartIfComplete(true) // 완료가 되어도 재실행될수 있게
                 .build();
@@ -123,7 +123,6 @@ public class ProductUploadJobConfiguration {
                 .delimited()//컴마로 나눠진 걸 읽는다
                 .names(ReflectionUtils.getFiledNames(ProductUploadCsvRow.class).toArray(String[]::new)) // 콤마로 파싱한 다음에 읽어지는 그 값들을 매핑 해준다
                 .targetType(ProductUploadCsvRow.class)
-                .linesToSkip(1) // 첫째줄이 header이기 때문에 첫째줄은 넘어가게 한다
                 .build();
         return new SynchronizedItemStreamReaderBuilder<ProductUploadCsvRow>()
                 .delegate(fileItemReader)

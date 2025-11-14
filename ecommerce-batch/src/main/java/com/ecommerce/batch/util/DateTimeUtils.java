@@ -1,6 +1,7 @@
 package com.ecommerce.batch.util;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateTimeUtils {
@@ -10,5 +11,9 @@ public class DateTimeUtils {
 
     public static LocalDate toLocalDate(String date) {
         return LocalDate.parse(date, dateFormatter);
+    }
+
+    public static LocalDateTime toLocalDateTime(String dateTime) {
+        return LocalDateTime.parse(dateTime, dateTimeFormatter);
     }
 }

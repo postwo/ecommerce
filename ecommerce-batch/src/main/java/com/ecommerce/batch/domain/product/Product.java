@@ -1,6 +1,6 @@
 package com.ecommerce.batch.domain.product;
 
-import com.ecommerce.batch.dto.ProductUploadCsvRow;
+import com.ecommerce.batch.dto.upload.ProductUploadCsvRow;
 import com.ecommerce.batch.util.DateTimeUtils;
 import com.ecommerce.batch.util.RandomUtils;
 import lombok.AccessLevel;

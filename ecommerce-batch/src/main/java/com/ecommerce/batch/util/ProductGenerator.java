@@ -1,7 +1,7 @@
 package com.ecommerce.batch.util;
 
 import com.ecommerce.batch.domain.product.ProductStatus;
-import com.ecommerce.batch.dto.ProductUploadCsvRow;
+import com.ecommerce.batch.dto.upload.ProductUploadCsvRow;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 

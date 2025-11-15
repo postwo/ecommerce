@@ -1,4 +1,4 @@
-package com.ecommerce.batch.dto;
+package com.ecommerce.batch.dto.upload;
 
 import lombok.*;
 

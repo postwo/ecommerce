@@ -20,10 +20,13 @@ import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuild
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
+import org.springframework.batch.item.support.SynchronizedItemStreamWriter;
+import org.springframework.batch.item.support.builder.SynchronizedItemStreamWriterBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
@@ -42,13 +45,17 @@ public class ProductDownloadJobConfiguration {
                 .build();
     }
 
+    //TaskExecutor는 Spring Batch의 Step에 멀티 스레드를 적용시키기 위해 사용
+    //.taskExecutor()를 설정하지 않으면, Step은 싱글 스레드로 동작
+    //.taskExecutor()를 설정하면, Step은 해당 TaskExecutor를 사용하여 멀티 스레드로 동작
     @Bean
     public Step productPagingStep(JobRepository jobRepository,
                                   PlatformTransactionManager transactionManager,
                                   JdbcPagingItemReader<Product> productPagingReader,
                                   ItemProcessor<Product, ProductDownloadCsvRow> productDownloadProcessor,
                                   ItemWriter<ProductDownloadCsvRow> productCsvWriter,
-                                  StepExecutionListener stepExecutionListener) {
+                                  StepExecutionListener stepExecutionListener,
+                                  TaskExecutor taskExecutor) {
         return new StepBuilder("productPagingStep", jobRepository)
                 .<Product, ProductDownloadCsvRow>chunk(10000, transactionManager)
                 .reader(productPagingReader)
@@ -56,6 +63,7 @@ public class ProductDownloadJobConfiguration {
                 .writer(productCsvWriter)
                 .allowStartIfComplete(true)
                 .listener(stepExecutionListener)
+                .taskExecutor(taskExecutor)
                 .build();
     }
 
@@ -89,17 +97,21 @@ public class ProductDownloadJobConfiguration {
         return ProductDownloadCsvRow::from;
     }
 
+    //SynchronizedItemStreamWriter는 멀티 스레드 환경에서 발생할 수 있는 동시성 이슈를 해결하기 위해 사용하는 것
     @Bean
     @StepScope
-    public FlatFileItemWriter<ProductDownloadCsvRow> productCsvWriter(
+    public SynchronizedItemStreamWriter<ProductDownloadCsvRow> productCsvWriter(
             @Value("#{jobParameters['outputFilePath']}") String path) {
         List<String> columns = ReflectionUtils.getFiledNames(ProductDownloadCsvRow.class);
-        return new FlatFileItemWriterBuilder<ProductDownloadCsvRow>()
+        FlatFileItemWriter<ProductDownloadCsvRow> productCsvWriter = new FlatFileItemWriterBuilder<ProductDownloadCsvRow>()
                 .name("productCsvWriter")
                 .resource(new FileSystemResource(path))
                 .delimited()
                 .names(columns.toArray(String[]::new))
                 .headerCallback(writer -> writer.write(String.join(",", columns)))
+                .build();
+        return new SynchronizedItemStreamWriterBuilder<ProductDownloadCsvRow>()
+                .delegate(productCsvWriter)
                 .build();
     }
 

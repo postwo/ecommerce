@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,5 +38,9 @@ public class ProductService {
                 Timestamp.valueOf(product.getCreatedAt()),
                 Timestamp.valueOf(product.getUpdatedAt())
         );
+    }
+
+    public List<String> getProductIds() {
+        return jdbcTemplate.queryForList("select product_id from products", String.class);
     }
 }

@@ -1,11 +1,6 @@
 package com.ecommerce.batch.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -79,4 +74,18 @@ public class FileUtils {
         return tempFile;
     }
 
+    public static void mergeFiles(String header, List<File> files, File outputFile) {
+        try (BufferedOutputStream outputStream = new BufferedOutputStream(
+                new FileOutputStream(outputFile))) {
+            outputStream.write((header + "\n").getBytes());
+            for (File partFile : files) {
+                System.out.println("병합 중: " + partFile.getName());
+                Files.copy(partFile.toPath(), outputStream);
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

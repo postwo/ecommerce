@@ -3,6 +3,7 @@ package com.ecommerce.batch.jobconfig.product.download;
 import com.ecommerce.batch.domain.file.PartitionedFileRepository;
 import com.ecommerce.batch.domain.product.Product;
 import com.ecommerce.batch.dto.download.ProductDownloadCsvRow;
+import com.ecommerce.batch.service.product.ProductDownloadPartitioner;
 import com.ecommerce.batch.util.FileUtils;
 import com.ecommerce.batch.util.ReflectionUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +51,7 @@ public class ProductDownloadJobConfiguration {
                                   Step productDownloadPartitionStep, Step productFileMergeStep) {
         return new JobBuilder("productDownloadJob", jobRepository)
                 .start(productDownloadPartitionStep)
-                .next(productFileMergeStep)
+                .next(productFileMergeStep) // 위 스타트 작업이 끝나면 실행
                 .listener(listener) //로깅, 알림, 리소스 정리, 최종 결과 보고 등 각종 부가적인 처리를 수행하는 매우 유용한 "감시자"
                 .build();
     }
@@ -174,7 +175,7 @@ public class ProductDownloadJobConfiguration {
                                            PartitionedFileRepository fileManager) {
         return (contribution, chunkContext) -> {
             FileUtils.mergeFiles(
-                    String.join(",", ReflectionUtils.getFieldNames(ProductDownloadCsvRow.class)),
+                    String.join(",", ReflectionUtils.getFiledNames(ProductDownloadCsvRow.class)),
                     fileManager.getFiles(),
                     new File(path));
             return RepeatStatus.FINISHED;
